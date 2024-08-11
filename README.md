@@ -2,9 +2,10 @@
 
 ## Description
 
-A new RPC technology based on QUIC. The QUIC module is imported from: [quic-go](https://github.com/quic-go/quic-go)
+This is a golang module to implement a new RPC technology based on QUIC.
+The QUIC module is imported from: [quic-go](https://github.com/quic-go/quic-go).
 
-## Requirements
+## Development Environment
 
 | Content | Implememt | Version |
 |-|-|-|
