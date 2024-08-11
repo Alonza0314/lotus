@@ -6,7 +6,7 @@ import (
 )
 
 func TestLoadTLSCertificate(t *testing.T) {
-	if tlsCert := security.LoadTLSCertificate("test.pem"); tlsCert == nil {
-		t.Fatal("Expected non-nil TLS certificate")
+	if _, err := security.LoadTLSCertificate("test.pem"); err != nil {
+		t.Fatal(err)
 	}
 }
