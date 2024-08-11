@@ -10,6 +10,7 @@ A new RPC technology based on QUIC. The QUIC module is imported from: [quic-go](
 |-|-|-|
 | OS | Linux | Ubuntu 22.04.4 LTS  |
 | Language | Golang | go1.22.5 linux/amd64 |
+|PKI|TLS|1.3|
 
 ## How to use
 
