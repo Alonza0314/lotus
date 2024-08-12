@@ -1,4 +1,4 @@
-module lotus
+module github/Alonza0314/lotus
 
 go 1.22.5
 

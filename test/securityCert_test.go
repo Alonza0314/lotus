@@ -1,7 +1,7 @@
 package test
 
 import (
-	"lotus/security"
+	"github/Alonza0314/lotus/security"
 	"testing"
 )
 

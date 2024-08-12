@@ -2,7 +2,7 @@ package test
 
 import (
 	"context"
-	"lotus/server"
+	"github/Alonza0314/lotus/server"
 	"testing"
 )
 
