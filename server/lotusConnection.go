@@ -4,7 +4,7 @@ import (
 	"context"
 	"errors"
 	"log"
-	"github/Alonza0314/lotus/packet"
+	"github.com/Alonza0314/lotus/packet"
 	"reflect"
 	"time"
 

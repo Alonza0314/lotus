@@ -2,7 +2,7 @@ package test
 
 import (
 	"encoding/json"
-	"github/Alonza0314/lotus/packet"
+	"github.com/Alonza0314/lotus/packet"
 	"testing"
 )
 

@@ -1,7 +1,7 @@
 package test
 
 import (
-	"github/Alonza0314/lotus/packet"
+	"github.com/Alonza0314/lotus/packet"
 	"testing"
 )
 
