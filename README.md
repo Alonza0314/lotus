@@ -96,25 +96,31 @@ go get github.com/Alonza0314/lotus@latest
     lclient, err := client.NewLotusClient(":4433", true)
     ```
 
-3. Defer the close function.
+3. Make a dail to the server.
+
+    ```go
+    lconn, err := lclient.Dial(context.Background())
+    ```
+
+4. Defer the close function.
 
     ```go
     defer lconn.Close()
     ```
 
-4. Set the Service identifier and arges slice and the reply slice. Be careful that the type of args and reply is interface slice.
+5. Set the Service identifier and arges slice and the reply slice. Be careful that the type of args and reply is interface slice.
 
     ```go
     function, args, reply := "add", []interface{}{1, 2}, []interface{}{}
     ```
 
-5. Call the service function.
+6. Call the service function.
 
     ```go
     err := lconn.Call(context.Background(), function, args, &reply)
     ```
 
-6. Make a type assertion on the reply according to the function definition.
+7. Make a type assertion on the reply according to the function definition.
 
     ```go
     response := reply[0].(float64)
