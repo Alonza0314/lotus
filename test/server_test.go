@@ -7,7 +7,7 @@ import (
 )
 
 func TestServer(t *testing.T) {
-	ls, err := server.NewLotusServer("test.pem")
+	lserver, err := server.NewLotusServer("test.pem")
 	if err != nil {
 		t.Fatalf("expected no error, got %v", err)
 	}
@@ -16,21 +16,21 @@ func TestServer(t *testing.T) {
 		return a + b
 	}
 
-	err = ls.RegisterService("add", add)
+	err = lserver.RegisterService("add", add)
 	if err != nil {
 		t.Fatalf("expected no error, got %v", err)
 	}
 
-	ll, err := ls.Listen(":4433")
+	llistener, err := lserver.Listen(":4433")
 	if err != nil {
 		t.Fatalf("expected no error, got %v", err)
 	}
 
 	for i := 0; i < 1; i += 1 {
-		lc, err := ll.Accept(context.Background())
+		lconn, err := llistener.Accept(context.Background())
 		if err != nil {
 			t.Fatalf("expected no error, got %v", err)
 		}
-		go lc.HandleFunc(*ls)
+		go lconn.HandleFunc(*lserver)
 	}
 }
