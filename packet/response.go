@@ -34,3 +34,12 @@ func (res *Response) MakeJson() ([]byte, error) {
 	}
 	return ret, nil
 }
+
+func ParseResponse(msg []byte) (*Response, error) {
+	var res Response
+	err := json.Unmarshal(msg, &res)
+	if err != nil {
+		return nil, errors.New("failed to parse request:\n\t" + err.Error())
+	}
+	return &res, nil
+}

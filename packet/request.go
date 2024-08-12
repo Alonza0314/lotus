@@ -6,18 +6,26 @@ import (
 )
 
 type Request struct {
-	Function   string        `json:"function"`
-	Parameters []interface{} `json:"parameters"`
+	Function string        `json:"function"`
+	Args     []interface{} `json:"args"`
 }
 
-func NewRequest(function string, parameters []interface{}) (*Request, error) {
+func NewRequest(function string, args []interface{}) (*Request, error) {
 	if function == "" {
 		return nil, errors.New("failed to new request:\n\tfunction name can't be empty")
 	}
 	return &Request{
 		Function: function,
-		Parameters: parameters,
+		Args:     args,
 	}, nil
+}
+
+func (req *Request) MakeJson() ([]byte, error) {
+	ret, err := json.Marshal(req)
+	if err != nil {
+		return []byte{}, errors.New("failed to make json:\n\t" + err.Error())
+	}
+	return ret, nil
 }
 
 func ParseRequest(msg []byte) (*Request, error) {

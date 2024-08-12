@@ -44,7 +44,7 @@ func TestNewResponse(t *testing.T) {
 	}
 }
 
-func TestMakeJson(t *testing.T) {
+func TestMakeJsonRes(t *testing.T) {
 	condition := "success"
 	function := "testFunction"
 	replys := []interface{}{1, "reply"}

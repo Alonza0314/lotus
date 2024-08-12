@@ -4,9 +4,10 @@ import (
 	"context"
 	"errors"
 	"log"
-	"github.com/Alonza0314/lotus/packet"
 	"reflect"
 	"time"
+
+	"github.com/Alonza0314/lotus/packet"
 
 	"github.com/quic-go/quic-go"
 )
@@ -28,18 +29,19 @@ func (lc *lotusConnection) HandleFunc(ls lotusServer) {
 	defer stream.Close()
 
 	buf := make([]byte, 4096)
-	if _, err = stream.Read(buf); err != nil {
+	n, err := stream.Read(buf)
+	if err != nil {
 		log.Println("falied to read from stream:\n\t", err)
 		return
 	}
 
-	req, err := packet.ParseRequest(buf)
+	req, err := packet.ParseRequest(buf[:n])
 	if err != nil {
 		log.Println(err)
 		return
 	}
 
-	value, err := callFunction(ls, req.Function, req.Parameters...)
+	value, err := callFunction(ls, req.Function, req.Args...)
 
 	var res *packet.Response
 	if err != nil {
@@ -62,7 +64,7 @@ func (lc *lotusConnection) HandleFunc(ls lotusServer) {
 	time.Sleep(1 * time.Second)
 }
 
-func callFunction(ls lotusServer, function string, parameters ...interface{}) (interface{}, error) {
+func callFunction(ls lotusServer, function string, args ...interface{}) (interface{}, error) {
 	f, ok := ls.serviceMap[function]
 	if !ok {
 		return nil, errors.New("failed to call function:\n\tno this function")
@@ -73,28 +75,21 @@ func callFunction(ls lotusServer, function string, parameters ...interface{}) (i
 		return nil, errors.New("failed to call function:\n\tno this function")
 	}
 
-	if len(parameters) != v.Type().NumIn() {
-		return nil, errors.New("failed to call funtion:\n\tnumber of parameters is not correct")
+	if len(args) != v.Type().NumIn() {
+		return nil, errors.New("failed to call funtion:\n\tnumber of args is not correct")
 	}
 
-	reflectParameters := make([]reflect.Value, len(parameters))
-	for i, param := range parameters {
-		reflectParameters[i] = reflect.ValueOf(param)
+	reflectArgs := make([]reflect.Value, len(args))
+	for i, arg := range args {
+		reflectArgs[i] = reflect.ValueOf(arg)
 	}
 
-	result := v.Call(reflectParameters)
+	result := v.Call(reflectArgs)
 
-	var err error
 	var values []interface{}
 
-	for i, val := range result {
-		if i == len(result) - 1 {
-			if e, ok := val.Interface().(error); ok && e != nil {
-				err = e
-			}
-		} else {
-			values = append(values, val.Interface())
-		}
+	for _, val := range result {
+		values = append(values, val.Interface())
 	}
-	return values, err
+	return values, nil
 }

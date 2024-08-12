@@ -16,9 +16,15 @@ The QUIC module is imported from: [quic-go](https://github.com/quic-go/quic-go).
 
 ## How to use
 
+Use this command to get this module:
+
+```bash
+go get github.com/Alonza0314/lotus@latest
+```
+
 ### Server
 
-1. Import this module
+1. Import this module.
 
     ``` go
     import "github.com/Alonza0314/lotus/server"
@@ -36,12 +42,12 @@ The QUIC module is imported from: [quic-go](https://github.com/quic-go/quic-go).
     lserver, err := server.NewLotusServer("test.pem")
     ```
 
-4. Write your service function and decide this funtion's identifier.
+4. Write your service function and decide this funtion's identifier. Be careful that do not use "int" directly. Instead, use float64 to represent the number's type, since the json module does not distinguish "int" and "float64".
 
     ```go
     // identifier = "add"
-    func add(a, b int) int {
-        return a + b
+    func add(a, b interface{}) float64 {
+        return a.(float64) + b.(float64)
     }
     ```
 
@@ -77,6 +83,42 @@ The QUIC module is imported from: [quic-go](https://github.com/quic-go/quic-go).
     ```
 
 ### Client
+
+1. Import this module.
+
+    ``` go
+    import "github.com/Alonza0314/lotus/client"
+    ```
+
+2. Init a lotus client. The first arg is the address and the port. The other is a bool value to identity if the tls pem used by server is signed by it self or signed by public.
+
+    ```go
+    lclient, err := client.NewLotusClient(":4433", true)
+    ```
+
+3. Defer the close function.
+
+    ```go
+    defer lconn.Close()
+    ```
+
+4. Set the Service identifier and arges slice and the reply slice. Be careful that the type of args and reply is interface slice.
+
+    ```go
+    function, args, reply := "add", []interface{}{1, 2}, []interface{}{}
+    ```
+
+5. Call the service function.
+
+    ```go
+    err := lconn.Call(context.Background(), function, args, &reply)
+    ```
+
+6. Make a type assertion on the reply according to the function definition.
+
+    ```go
+    response := reply[0].(float64)
+    ```
 
 ## Author
 
