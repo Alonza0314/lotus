@@ -7,6 +7,6 @@ import (
 
 func TestLoadTLSCertificate(t *testing.T) {
 	if _, err := security.LoadTLSCertificate("test.pem"); err != nil {
-		t.Fatal(err)
+		t.Fatalf("expected no error, got %v", err)
 	}
 }

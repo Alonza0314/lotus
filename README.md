@@ -21,16 +21,60 @@ The QUIC module is imported from: [quic-go](https://github.com/quic-go/quic-go).
 1. Import this module
 
     ``` go
-    import "github.com/Alonza0314/lotus"
+    import "github.com/Alonza0314/lotus/"
     ```
 
-2. Prepare your own pem using in TLS communication.
+2. Prepare your own pem using in TLS communication(QUIC required).
+
+    ```go
+    penPath := "test.pem"
+    ```
+
 3. Init a lotus server.
+
+    ```go
+    ls, err := server.NewLotusServer("test.pem")
+    ```
+
 4. Write your service function and decide this funtion's identifier.
+
+    ```go
+    // identifier = "add"
+    func add(a, b int) int {
+        return a + b
+    }
+    ```
+
 5. Register this function to lotus server.
-6. Call listen function to get lotus Listener.
+
+    ```go
+    err = ls.RegisterService("add", add)
+    ```
+
+6. Call listen function to get lotus Listener and asign the listening address and port.
+
+    ```go
+    ll, err := ls.Listen(":4433")
+    ```
+
 7. Use a for loop to call accept function to accept the client's coinnection.
-8. Whenever there exists a new connection, use go routine to handle it. Be caerful that you need to pass the lotus server information since the function is register in the lotus server structure
+
+    ```go
+    lc, err := ll.Accept(context.Background())
+    ```
+
+8. Whenever there exists a new connection, use go routine to handle it. Be caerful that you need to pass the lotus server information since the function is register in the lotus server structure.
+
+    ```go
+    for {
+        lc, err := ll.Accept(context.Background())
+        if err != nil {
+            // TODO
+            continue
+        }
+        go lc.HandleFunc(*ls)
+    }
+    ```
 
 ### Client
 
