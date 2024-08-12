@@ -30,7 +30,7 @@ The QUIC module is imported from: [quic-go](https://github.com/quic-go/quic-go).
 5. Register this function to lotus server.
 6. Call listen function to get lotus Listener.
 7. Use a for loop to call accept function to accept the client's coinnection.
-8. Whenever there exist a new connection, use go routine to handle it. Be caerful that you need to pass the lotus server information since the function is register in the lotus server structure
+8. Whenever there exists a new connection, use go routine to handle it. Be caerful that you need to pass the lotus server information since the function is register in the lotus server structure
 
 ### Client
 
